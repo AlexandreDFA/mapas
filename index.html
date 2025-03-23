@@ -4,14 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mapas Airbnb</title>
+    <script>
+        function mudarMapa() {
+            var mapaSelecionado = document.getElementById("selecionarMapa").value;
+            document.getElementById("mapaFrame").src = mapaSelecionado;
+        }
+    </script>
 </head>
 <body>
     <h1>Mapas Airbnb por Localização</h1>
-    <iframe src="mapas/mapa_0.html" width="100%" height="500px"></iframe><br>
-    <iframe src="mapas/mapa_1.html" width="100%" height="500px"></iframe><br>
-    <iframe src="mapas/mapa_2.html" width="100%" height="500px"></iframe><br>
-    <iframe src="mapas/mapa_3.html" width="100%" height="500px"></iframe><br>
-    <iframe src="mapas/mapa_4.html" width="100%" height="500px"></iframe><br>
-    <iframe src="mapas/mapa_5.html" width="100%" height="500px"></iframe><br>
+
+    <label for="selecionarMapa">Escolhe um mapa:</label>
+    <select id="selecionarMapa" onchange="mudarMapa()">
+        <option value="mapas/mapa_0.html">Mapa 1</option>
+        <option value="mapas/mapa_1.html">Mapa 2</option>
+        <option value="mapas/mapa_2.html">Mapa 3</option>
+        <option value="mapas/mapa_3.html">Mapa 4</option>
+        <option value="mapas/mapa_4.html">Mapa 5</option>
+        <option value="mapas/mapa_5.html">Mapa 6</option>
+    </select>
+
+    <br><br>
+
+    <iframe id="mapaFrame" src="mapas/mapa_0.html" width="100%" height="500px"></iframe>
+
 </body>
 </html>
