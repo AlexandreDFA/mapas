@@ -3,78 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa Airbnb - Cidades</title>
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
-    <style>
-        #map { height: 600px; width: 100%; }
-        select { margin: 10px; padding: 5px; font-size: 16px; }
-    </style>
+    <title>Mapas Airbnb - Cidades</title>
+    <script>
+        function mudarMapa() {
+            var cidadeSelecionada = document.getElementById("selecionarMapa").value;
+            document.getElementById("mapaFrame").src = cidadeSelecionada;
+        }
+    </script>
 </head>
 <body>
-    <h1>Mapa Airbnb - Escolhe a Cidade</h1>
-    
-    <!-- Dropdown para selecionar a cidade -->
-    <label for="cidade">Seleciona a cidade:</label>
-    <select id="cidade">
-        <option value="">-- Escolher --</option>
-        <option value="Brooklyn">Brooklyn</option>
-        <option value="Manhattan">Manhattan</option>
-        <option value="Queens">Queens</option>
-        <option value="Bronx">Bronx</option>
-        <option value="Staten Island">Staten Island</option>
+    <h1>Mapas Airbnb por Localização</h1>
+
+    <label for="selecionarMapa">Escolhe um mapa:</label>
+    <select id="selecionarMapa" onchange="mudarMapa()">
+        <option value="mapa_Brooklyn.html">Mapa de Brooklyn</option>
+        <option value="mapa_Manhattan.html">Mapa de Manhattan</option>
+        <option value="mapa_Queens.html">Mapa de Queens</option>
+        <option value="mapa_Bronx.html">Mapa do Bronx</option>
+        <option value="mapa_StatenIsland.html">Mapa de Staten Island</option>
     </select>
 
-    <div id="map"></div>
+    <br><br>
 
-    <script>
-        var map = L.map('map').setView([40.7, -74.0], 10);  // Posição inicial
+    <iframe id="mapaFrame" src="mapa_Brooklyn.html" width="100%" height="500px"></iframe>
 
-        // Adicionar um mapa base leve
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
-
-        var markers = L.markerClusterGroup();
-
-        // Função para carregar o mapa de uma cidade
-        function carregarMapa(cidade) {
-            markers.clearLayers();  // Remover marcadores anteriores
-            if (!cidade) return;    // Se não houver cidade selecionada, sair
-
-            var geojsonFile = `mapa_${cidade}.geojson`;  // Agora os ficheiros estão na raiz
-
-            fetch(geojsonFile)
-            .then(response => response.json())
-            .then(data => {
-                L.geoJSON(data, {
-                    onEachFeature: function (feature, layer) {
-                        if (feature.properties) {
-                            var popup_info = `
-                                <b>${feature.properties.name}</b><br>
-                                🏡 Tipo: ${feature.properties.room_type}<br>
-                                📍 Bairro: ${feature.properties.neighbourhood} (${feature.properties.neighbourhood_group})<br>
-                                💰 Preço: ${feature.properties.price}€<br>
-                                🌙 Noites mínimas: ${feature.properties.minimum_nights}<br>
-                                👤 Anfitrião: ${feature.properties.host_name}
-                            `;
-                            layer.bindPopup(popup_info);
-                        }
-                    }
-                }).eachLayer(layer => markers.addLayer(layer));
-
-                map.addLayer(markers);
-            })
-            .catch(error => console.error("Erro ao carregar o mapa:", error));
-        }
-
-        // Evento para trocar de cidade no dropdown
-        document.getElementById("cidade").addEventListener("change", function() {
-            var cidadeSelecionada = this.value;
-            carregarMapa(cidadeSelecionada);
-        });
-    </script>
 </body>
 </html>
